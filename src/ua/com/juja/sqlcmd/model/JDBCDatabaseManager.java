@@ -128,6 +128,29 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
 
+    @Override
+    public String[] getTablesColumns(String tableName) {
+        try {
+            String sql = "SELECT * " +
+                    "FROM information_schema.columns " +
+                    "WHERE table_schema = 'public' " +
+                    "AND table_name = '" + tableName + "'";
+            String[] tables = new String[100];
+            int index = 0;
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                tables[index++] = rs.getString("column_name");
+            }
+            rs.close();
+            stmt.close();
+            return Arrays.copyOf(tables, index, String[].class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new String[0];
+        }
+    }
+
     private String getValuesFormated(DataSet input, String format) {
         String values = "";
         for (Object value : input.getValues()) {

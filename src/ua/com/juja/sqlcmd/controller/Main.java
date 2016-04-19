@@ -13,7 +13,7 @@ public class Main {
         View view = new Console();
         DatabaseManager mamager = new JDBCDatabaseManager();
 
-        MainConroller conroller = new MainConroller(view, mamager);
+        MainController conroller = new MainController(view, mamager);
         conroller.run();
     }
 }
