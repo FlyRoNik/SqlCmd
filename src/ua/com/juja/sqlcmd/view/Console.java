@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * Created by FlyRoNik on 19.04.2016.
  */
-public class Console implements Vive {
+public class Console implements View {
 
     @Override
     public void write(String massage) {
