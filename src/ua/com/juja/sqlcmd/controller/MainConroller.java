@@ -14,9 +14,9 @@ public class MainConroller {
         DatabaseManager manager = new JDBCDatabaseManager();
 
 
-        vive.write("Привет юзер!");
-        vive.write("Введите, пожалуйста имя базы данных, " +
-                "имя пользователя и пароль в формате: database|userName|password");
+        vive.write("РџСЂРёРІРµС‚ СЋР·РµСЂ!");
+        vive.write("Р’РІРµРґРёС‚Рµ, РїРѕР¶Р°Р»СѓР№СЃС‚Р° РёРјСЏ Р±Р°Р·С‹ РґР°РЅРЅС‹С…, " +
+                "РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Рё РїР°СЂРѕР»СЊ РІ С„РѕСЂРјР°С‚Рµ: database|userName|password");
 
         while (true){
             String string = vive.read();
@@ -32,13 +32,13 @@ public class MainConroller {
                 if (e.getCause() != null) {
                     massage += " " + e.getCause().getMessage();
                 }
-                vive.write("Неудача! по причине: " + massage);
-                vive.write("Повтори попытку!");
+                vive.write("РќРµСѓРґР°С‡Р°! РїРѕ РїСЂРёС‡РёРЅРµ: " + massage);
+                vive.write("РџРѕРІС‚РѕСЂРё РїРѕРїС‹С‚РєСѓ!");
             }
         }
 
 
 
-        vive.write("Успех!");
+        vive.write("РЈСЃРїРµС…!");
     }
 }
