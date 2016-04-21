@@ -11,9 +11,9 @@ import ua.com.juja.sqlcmd.view.View;
 public class Main {
     public static void main(String[] args) {
         View view = new Console();
-        DatabaseManager mamager = new JDBCDatabaseManager();
+        DatabaseManager manager = new JDBCDatabaseManager();
 
-        MainController conroller = new MainController(view, mamager);
-        conroller.run();
+        MainController controller = new MainController(view, manager);
+        controller.run();
     }
 }
