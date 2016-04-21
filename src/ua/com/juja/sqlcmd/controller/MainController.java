@@ -11,66 +11,33 @@ public class MainController {
 
     private Command[] commands;
     private View view;
-    private DatabaseManager manager;
 
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
-        this.manager = manager;
-        this.commands = new Command[]{new Exit(view), new Help(view),
-                new List(view, manager), new Find(view, manager),
+        this.commands = new Command[]{
+                new Connect(view, manager),
+                new Exit(view),
+                new Help(view),
+                new IsConnected(view, manager),
+                new List(view, manager),
+                new Find(view, manager),
                 new Unsupported(view)};
     }
 
     public void run(){
-        connectToDb();
+        view.write("Привет юзер!");
+        view.write("Введите, пожалуйста имя базы данных, " +
+                "имя пользователя и пароль в формате: connect|database|userName|password");
 
         while (true) {
-            view.write("Введи команду (или help для помощи):");
             String input = view.read();
-
             for (Command command : commands) {
                 if (command.canProcess(input)) {
                     command.process(input);
                     break;
                 }
             }
+            view.write("Введи команду (или help для помощи):");
         }
-    }
-
-    private void connectToDb() {
-        view.write("Привет юзер!");
-        view.write("Введите, пожалуйста имя базы данных, " +
-                "имя пользователя и пароль в формате: database|userName|password");
-
-        while (true){
-            try {
-                String string = view.read();
-                String[] data = string.split("\\|");
-                if (data.length != 3) {
-                    throw new IllegalArgumentException("Неверно количество параметров разделенных " +
-                            "знаком '|', ожидается 3, но есть: " + data.length);
-                }
-                String databaseName = data[0];
-                String userName = data[1];
-                String password = data[2];
-
-                manager.connect(databaseName, userName, password);
-                break;
-            } catch (Exception e) {
-                printError(e);
-            }
-        }
-
-
-        view.write("Успех!");
-    }
-
-    private void printError(Exception e) {
-        String massage = e.getMessage();
-        if (e.getCause() != null) {
-            massage += " " + e.getCause().getMessage();
-        }
-        view.write("Неудача! по причине: " + massage);
-        view.write("Повтори попытку!");
     }
 }

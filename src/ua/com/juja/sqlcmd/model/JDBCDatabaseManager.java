@@ -151,6 +151,11 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
 
+    @Override
+    public boolean isConnected() {
+        return connection != null;
+    }
+
     private String getValuesFormated(DataSet input, String format) {
         String values = "";
         for (Object value : input.getValues()) {

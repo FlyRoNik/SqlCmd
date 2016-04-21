@@ -9,8 +9,8 @@ import ua.com.juja.sqlcmd.view.View;
  */
 public class Find implements Command {
 
-    private final View view;
-    private final DatabaseManager manager;
+    private View view;
+    private DatabaseManager manager;
 
     public Find(View view, DatabaseManager manager) {
         this.view = view;
