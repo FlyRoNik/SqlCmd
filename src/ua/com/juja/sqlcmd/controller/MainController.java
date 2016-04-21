@@ -1,9 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
-import ua.com.juja.sqlcmd.controller.command.Command;
-import ua.com.juja.sqlcmd.controller.command.Exit;
-import ua.com.juja.sqlcmd.controller.command.Help;
-import ua.com.juja.sqlcmd.controller.command.List;
+import ua.com.juja.sqlcmd.controller.command.*;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
@@ -20,7 +17,7 @@ public class MainController {
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
         this.manager = manager;
-        this.commands = new Command[]{new Exit(view), new Help(view), new List(view, manager)};
+        this.commands = new Command[]{new Exit(view), new Help(view), new List(view, manager), new Find(view, manager)};
     }
 
     public void run(){
@@ -36,7 +33,7 @@ public class MainController {
                 commands[1].process(command);
             }else if (commands[0].canProcess(command)) {
                 commands[0].process(command);
-            }else if (command.startsWith("find|")) {
+            }else if (commands[3].canProcess(command)) {
                 doFind(command);
             }else {
                 view.write("Несуществующая команда: " + command);
@@ -64,15 +61,6 @@ public class MainController {
         }
     }
 
-    private void printColumn(DataSet column) {
-        Object[] values = column.getValues();
-        String result = "|";
-        for (Object value : values) {
-            result += value + "|";
-        }
-        view.write(result);
-    }
-
     private void printHeader(String[] tableData) {
         String result = "|";
         for (String name : tableData) {
@@ -81,6 +69,15 @@ public class MainController {
         view.write("--------------------");
         view.write(result);
         view.write("--------------------");
+    }
+
+    private void printColumn(DataSet column) {
+        Object[] values = column.getValues();
+        String result = "|";
+        for (Object value : values) {
+            result += value + "|";
+        }
+        view.write(result);
     }
 
     private void connectToDb() {
