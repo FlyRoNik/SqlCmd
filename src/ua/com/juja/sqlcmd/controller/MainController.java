@@ -1,7 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
 import ua.com.juja.sqlcmd.controller.command.*;
-import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
@@ -34,50 +33,11 @@ public class MainController {
             }else if (commands[0].canProcess(command)) {
                 commands[0].process(command);
             }else if (commands[3].canProcess(command)) {
-                doFind(command);
+                commands[3].process(command);
             }else {
                 view.write("Несуществующая команда: " + command);
             }
         }
-    }
-
-    private void doFind(String command) {
-        String[] data = command.split("\\|");
-        String tableName = data[1];
-
-        DataSet[] tableData = manager.getTableData(tableName);
-        String[] tableColumns = manager.getTablesColumns(tableName);
-
-        printHeader(tableColumns);
-        printTable(tableData);
-
-
-    }
-
-    private void printTable(DataSet[] tableData) {
-
-        for (DataSet column : tableData) {
-            printColumn(column);
-        }
-    }
-
-    private void printHeader(String[] tableData) {
-        String result = "|";
-        for (String name : tableData) {
-            result += name + "|";
-        }
-        view.write("--------------------");
-        view.write(result);
-        view.write("--------------------");
-    }
-
-    private void printColumn(DataSet column) {
-        Object[] values = column.getValues();
-        String result = "|";
-        for (Object value : values) {
-            result += value + "|";
-        }
-        view.write(result);
     }
 
     private void connectToDb() {
