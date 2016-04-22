@@ -1,8 +1,6 @@
-package ua.com.juja.sqlcmd.database;
+package ua.com.juja.sqlcmd.model;
 
 import org.junit.Test;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.model.InMemoryDatabaseManager;
 
 import java.util.Arrays;
 

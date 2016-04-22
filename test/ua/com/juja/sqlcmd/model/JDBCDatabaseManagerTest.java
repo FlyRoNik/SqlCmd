@@ -1,7 +1,4 @@
-package ua.com.juja.sqlcmd.database;
-
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
+package ua.com.juja.sqlcmd.model;
 
 /**
  * Created by FlyRoNik on 09.04.2016.

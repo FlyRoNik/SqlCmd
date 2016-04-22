@@ -1,9 +1,7 @@
-package ua.com.juja.sqlcmd.database;
+package ua.com.juja.sqlcmd.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
 
 import java.util.Arrays;
 
