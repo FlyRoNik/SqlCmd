@@ -39,6 +39,7 @@ public class Find implements Command {
         for (DataSet column : tableData) {
             printColumn(column);
         }
+        view.write("--------------------");
     }
 
     private void printHeader(String[] tableData) {

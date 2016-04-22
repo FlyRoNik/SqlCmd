@@ -3,6 +3,8 @@ package ua.com.juja.sqlcmd.integration;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.controller.Main;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -17,9 +19,11 @@ public class IntegrationTest {
 
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
+    private DatabaseManager databaseManager;
 
     @Before
     public void setup(){
+        databaseManager = new JDBCDatabaseManager();
         out = new ByteArrayOutputStream();
         in = new ConfigurableInputStream();
 
@@ -46,6 +50,10 @@ public class IntegrationTest {
                 "\t\tдля подключения к базе данных, с которой будем работать\r\n" +
                 "\tlist\r\n" +
                 "\t\tдля получения списка всех таблиц базы, к которой подключились\r\n" +
+                "\tclear|tableName\r\n" +
+                "\t\tдля очистки всей таблицы\r\n" +
+                "\tcreate|tableName|column1|value1|column2|value2|...|columnN|valueN|\r\n" +
+                "\t\tдля создания записи в таблице таблице\r\n" +
                 "\tfind|tableName\r\n" +
                 "\t\tдля получения содержимого таблицы 'tableName'\r\n" +
                 "\thelp\r\n" +
@@ -187,7 +195,7 @@ public class IntegrationTest {
                 "Успех!\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //list
-                "[people, test, test2]\r\n" +
+                "[people, test2, test]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //exit
                 "До скорой встречи!\r\n", getData());
@@ -218,6 +226,7 @@ public class IntegrationTest {
                 "|2|Julia|Norkina|19|\r\n" +
                 "|3|ddas|null|2|\r\n" +
                 "|4|null|dasd|null|\r\n" +
+                "--------------------\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //exit
                 "До скорой встречи!\r\n", getData());
@@ -243,13 +252,95 @@ public class IntegrationTest {
                 "Успех!\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //list
-                "[people, test, test2]\r\n" +
+                "[people, test2, test]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //connect|mysqlcmd|nikita|1234
                 "Успех!\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //list
-                "[people, test, test2]\r\n" +
+                "[people, test2, test]\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //exit
+                "До скорой встречи!\r\n", getData());
+    }
+
+    @Test
+    public void testConnectWithError() {
+        //given
+        in.add("connect|mysqlcmd");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Привет юзер!\r\n" +
+                "Введите, пожалуйста имя базы данных, имя пользователя и пароль в формате:" +
+                " connect|database|userName|password\r\n" +
+                //connect|mysqlcmd
+                "Неудача! по причине: Неверно количество параметров " +
+                "разделенных знаком '|', ожидается 4, но есть: 2\r\n" +
+                "Повтори попытку!\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //exit
+                "До скорой встречи!\r\n", getData());
+    }
+
+    @Test
+    public void testFindAfterConnect_whitData() {
+        //given
+//        databaseManager.connect("mysqlcmd", "nikita", "1234");
+//        databaseManager.clear("test");
+//
+//        DataSet user1 = new DataSet();
+//        user1.put("id", 23);
+//        user1.put("name", "Jim");
+//        user1.put("surname", "Pupkin");
+//        user1.put("age", 23);
+//        databaseManager.create("test", user1);
+//
+//        DataSet user2 = new DataSet();
+//        user2.put("id", 20);
+//        user2.put("name", "Eva");
+//        user2.put("surname", "Mali");
+//        user2.put("age", 21);
+//        databaseManager.create("test", user2);
+
+        in.add("connect|mysqlcmd|nikita|1234");
+        in.add("clear|test");
+        in.add("create|test|id|23|name|Jim|surname|Pupkin|age|23");
+        in.add("create|test|id|20|name|Eva|surname|Mali|age|21");
+        in.add("find|test");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Привет юзер!\r\n" +
+                "Введите, пожалуйста имя базы данных, имя пользователя и пароль в формате:" +
+                " connect|database|userName|password\r\n" +
+                //connect|mysqlcmd|nikita|1234
+                "Успех!\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //clear|test
+                "Таблица test была успешно очищена.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //create|test|id|23|name|Jim|surname|Pupkin|age|23
+                "Запись {names:[id, name, surname, age], values:[23, Jim, Pupkin, 23]} " +
+                "была успешно созданна в таблице 'test'.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //create|test|id|20|name|Eva|surname|Mali|age|21
+                "Запись {names:[id, name, surname, age], values:[20, Eva, Mali, 21]} " +
+                "была успешно созданна в таблице 'test'.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //find|test
+                "--------------------\r\n" +
+                "|id|name|surname|age|\r\n" +
+                "--------------------\r\n" +
+                "|23|Jim|Pupkin|23|\r\n" +
+                "|20|Eva|Mali|21|\r\n" +
+                "--------------------\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //exit
                 "До скорой встречи!\r\n", getData());

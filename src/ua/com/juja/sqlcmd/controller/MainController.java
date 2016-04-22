@@ -20,6 +20,8 @@ public class MainController {
                 new Help(view),
                 new IsConnected(view, manager),
                 new List(view, manager),
+                new Clear(view, manager),
+                new Create(view, manager),
                 new Find(view, manager),
                 new Unsupported(view)};
     }
