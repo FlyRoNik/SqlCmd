@@ -40,16 +40,31 @@ public class MainController {
             "имя пользователя и пароль в формате: connect|database|userName|password");
         while (true) {
             String input = view.read();
-            if (input == null) {  //null is close application
-                new Exit(view).process(input);
-            }
+
             for (Command command : commands) {
-                if (command.canProcess(input)) {
-                    command.process(input);
+                try {
+                    if (command.canProcess(input)) {
+                        command.process(input);
+                        break;
+                    }
+                } catch (Exception e) {
+                    if (e instanceof ExitException) {
+                        throw e;
+                    }
+                    printError(e);
                     break;
                 }
             }
             view.write("Введи команду (или help для помощи):");
         }
+    }
+
+    private void printError(Exception e) {
+        String massage = e.getMessage();
+        if (e.getCause() != null) {
+            massage += " " + e.getCause().getMessage();
+        }
+        view.write("Неудача! по причине: " + massage);
+        view.write("Повтори попытку!");
     }
 }

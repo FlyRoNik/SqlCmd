@@ -3,8 +3,6 @@ package ua.com.juja.sqlcmd.integration;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.controller.Main;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -19,11 +17,9 @@ public class IntegrationTest {
 
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
-    private DatabaseManager databaseManager;
 
     @Before
     public void setup(){
-        databaseManager = new JDBCDatabaseManager();
         out = new ByteArrayOutputStream();
         in = new ConfigurableInputStream();
 
@@ -289,23 +285,6 @@ public class IntegrationTest {
     @Test
     public void testFindAfterConnect_whitData() {
         //given
-//        databaseManager.connect("mysqlcmd", "nikita", "1234");
-//        databaseManager.clear("test");
-//
-//        DataSet user1 = new DataSet();
-//        user1.put("id", 23);
-//        user1.put("name", "Jim");
-//        user1.put("surname", "Pupkin");
-//        user1.put("age", 23);
-//        databaseManager.create("test", user1);
-//
-//        DataSet user2 = new DataSet();
-//        user2.put("id", 20);
-//        user2.put("name", "Eva");
-//        user2.put("surname", "Mali");
-//        user2.put("age", 21);
-//        databaseManager.create("test", user2);
-
         in.add("connect|mysqlcmd|nikita|1234");
         in.add("clear|test");
         in.add("create|test|id|23|name|Jim|surname|Pupkin|age|23");
@@ -341,6 +320,58 @@ public class IntegrationTest {
                 "|23|Jim|Pupkin|23|\r\n" +
                 "|20|Eva|Mali|21|\r\n" +
                 "--------------------\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //exit
+                "До скорой встречи!\r\n", getData());
+    }
+
+    @Test
+    public void testClearWithError() {
+        //given
+        in.add("connect|mysqlcmd|nikita|1234");
+        in.add("clear|asdas|gfhn");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Привет юзер!\r\n" +
+                "Введите, пожалуйста имя базы данных, имя пользователя и пароль в формате:" +
+                " connect|database|userName|password\r\n" +
+                //connect|mysqlcmd|nikita|1234
+                "Успех!\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //clear|asdas|gfhn
+                "Неудача! по причине: Формат команды 'clear|tableName', а ты ввел: clear|asdas|gfhn\r\n" +
+                "Повтори попытку!\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //exit
+                "До скорой встречи!\r\n", getData());
+    }
+
+    @Test
+    public void testCreateWithErrors() {
+        //given
+        in.add("connect|mysqlcmd|nikita|1234");
+        in.add("create|tasdest|isadd|");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Привет юзер!\r\n" +
+                "Введите, пожалуйста имя базы данных, имя пользователя и пароль в формате:" +
+                " connect|database|userName|password\r\n" +
+                //connect|mysqlcmd|nikita|1234
+                "Успех!\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                //create|tasdest|isadd|
+                "Неудача! по причине: Должно быть четное количество параметров в формате " +
+                "'create|tableName|column1|value1|column2|value2|...|columnN|valueN|' , " +
+                "а ты преслал: 'create|tasdest|isadd|'\r\n" +
+                "Повтори попытку!\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //exit
                 "До скорой встречи!\r\n", getData());

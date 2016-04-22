@@ -25,34 +25,23 @@ public class Connect implements Command {
 
     @Override
     public void process(String command) {
-        try {
-            String[] data = command.split("\\|");
-            if (data.length != count()) { //TODO 4 - magic!
-                throw new IllegalArgumentException(String.format("Неверно количество параметров разделенных " +
-                        "знаком '|', ожидается %s, но есть: %s"
-                        , count(), data.length));
-            }
-            String databaseName = data[1];
-            String userName = data[2];
-            String password = data[3];
-
-            manager.connect(databaseName, userName, password);
-            view.write("Успех!");
-        } catch (Exception e) {
-            printError(e);
+        String[] data = command.split("\\|");
+        if (data.length != count()) { //TODO 4 - magic!
+            throw new IllegalArgumentException(String.format("Неверно количество параметров разделенных " +
+                    "знаком '|', ожидается %s, но есть: %s"
+                    , count(), data.length));
         }
+        String databaseName = data[1];
+        String userName = data[2];
+        String password = data[3];
+
+        manager.connect(databaseName, userName, password);
+        view.write("Успех!");
     }
 
     private int count() {
         return COMMAND_SAMPLE.split("\\|").length;
     }
 
-    private void printError(Exception e) {
-        String massage = e.getMessage();
-        if (e.getCause() != null) {
-            massage += " " + e.getCause().getMessage();
-        }
-        view.write("Неудача! по причине: " + massage);
-        view.write("Повтори попытку!");
-    }
+
 }
