@@ -46,24 +46,19 @@ public class FindTest {
         user2.put("surname", "Norkina");
         user2.put("age", 19);
 
-        DataSet[] data = new DataSet[] {user1, user2};
-
         when(manager.getTableData("people"))
-                .thenReturn(data);
+                .thenReturn(new DataSet[]{user1, user2});
 
         //when
         command.process("find|people");
 
         //then
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        verify(view, atLeastOnce()).write(captor.capture());
-        assertEquals("[--------------------, " +
-                        "|id|name|surname|age|, " +
-                        "--------------------, " +
-                        "|12|Nikita|Frolov|20|, " +
-                        "|13|Julia|Norkina|19|, " +
-                        "--------------------]",
-                captor.getAllValues().toString());
+        shouldPrint("[--------------------, " +
+                "|id|name|surname|age|, " +
+                "--------------------, " +
+                "|12|Nikita|Frolov|20|, " +
+                "|13|Julia|Norkina|19|, " +
+                "--------------------]");
     }
 
     @Test
@@ -118,6 +113,33 @@ public class FindTest {
         shouldPrint("[--------------------, " +
                 "|id|name|surname|age|, " +
                 "--------------------, " +
+                "--------------------]");
+    }
+
+    @Test
+    public void testPrintTableDataWithOneColumn() {
+        //given
+        when(manager.getTablesColumns("test"))
+                .thenReturn(new String[]{"id"});
+
+        DataSet user1 = new DataSet();
+        user1.put("id", 12);
+
+        DataSet user2 = new DataSet();
+        user2.put("id", 13);
+
+        when(manager.getTableData("test"))
+                .thenReturn(new DataSet[]{user1, user2});
+
+        //when
+        command.process("find|test");
+
+        //then
+        shouldPrint("[--------------------, " +
+                "|id|, " +
+                "--------------------, " +
+                "|12|, " +
+                "|13|, " +
                 "--------------------]");
     }
 
