@@ -19,7 +19,7 @@ public class FindTest {
 
     private DatabaseManager manager;
     private View view;
-    private Find command;
+    private Command command;
 
     @Before
     public void setup() {
