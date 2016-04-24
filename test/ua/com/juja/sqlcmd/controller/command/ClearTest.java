@@ -5,6 +5,8 @@ import org.junit.Test;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -69,5 +71,36 @@ public class ClearTest {
 
         //then
         assertFalse(canProcess);
+    }
+
+    @Test
+    public void testValidationErrorWhenCountParametersIsLessThen2() {
+        //give
+
+        //when
+        try {
+            command.process("clear");
+            fail();
+        } catch (IllegalArgumentException e) {
+            //then
+            assertEquals("Формат команды 'clear|tableName', а ты ввел: clear",
+                    e.getMessage());
+        }
+    }
+
+    @Test
+    public void testValidationErrorWhenCountParametersIsMoreThen2() {
+        //give
+
+        //when
+
+        try {
+            command.process("clear|table|qwe");
+            fail();
+        } catch (IllegalArgumentException e) {
+            //then
+            assertEquals("Формат команды 'clear|tableName', а ты ввел: clear|table|qwe",
+                    e.getMessage());
+        }
     }
 }
