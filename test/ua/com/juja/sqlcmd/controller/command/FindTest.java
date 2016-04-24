@@ -8,6 +8,8 @@ import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
@@ -59,6 +61,67 @@ public class FindTest {
                     "--------------------, " +
                     "|12|Nikita|Frolov|20|, " +
                     "|13|Julia|Norkina|19|, " +
+                    "--------------------]",
+                captor.getAllValues().toString());
+    }
+
+    @Test
+    public void testCanProcessFindWithParametersString() {
+        //give
+        Command command = new Find(view, manager);
+
+        //when
+        boolean canProcess = command.canProcess("find|people");
+
+        //then
+        assertTrue(canProcess);
+    }
+
+    @Test
+    public void testCanProcessFindWithoutParametersString() {
+        //give
+        Command command = new Find(view, manager);
+
+        //when
+        boolean canProcess = command.canProcess("find");
+
+        //then
+        assertFalse(canProcess);
+    }
+
+    @Test
+    public void testCanProcessQweString() {
+        //give
+        Command command = new Find(view, manager);
+
+        //when
+        boolean canProcess = command.canProcess("qwe|people");
+
+        //then
+        assertFalse(canProcess);
+    }
+
+    @Test
+    public void testPrintEmptyTableData() {
+        //given
+        Command command = new Find(view, manager);
+        when(manager.getTablesColumns("people"))
+                .thenReturn(new String[]{"id", "name", "surname", "age"});
+
+        DataSet[] data = new DataSet[0];
+
+        when(manager.getTableData("people"))
+                .thenReturn(data);
+
+        //when
+        command.process("find|people");
+
+        //then
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(view, atLeastOnce()).write(captor.capture());
+        assertEquals("[--------------------, " +
+                    "|id|name|surname|age|, " +
+                    "--------------------, " +
                     "--------------------]",
                 captor.getAllValues().toString());
     }
