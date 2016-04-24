@@ -8,7 +8,7 @@ import ua.com.juja.sqlcmd.view.View;
 public class FakeView implements View {
 
     private String massages = "";
-    private Object content;
+    private String input = null;
 
     @Override
     public void write(String massage) {
@@ -17,7 +17,16 @@ public class FakeView implements View {
 
     @Override
     public String read() {
-        return null;
+        if (input == null) {
+            throw new IllegalStateException("Для работы проинициализируйте метод read()");
+        }
+        String result = input;
+        this.input = null;
+        return result;
+    }
+
+    public void addRead(String input) {
+        this.input = input;
     }
 
     public Object getContent() {
