@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import ua.com.juja.sqlcmd.model.DataSet;
+import ua.com.juja.sqlcmd.model.DataSetImpl;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
@@ -37,13 +38,13 @@ public class FindTest {
         //given
         setupTableColumns("people", "id", "name", "surname", "age");
 
-        DataSet user1 = new DataSet();
+        DataSet user1 = new DataSetImpl();
         user1.put("id", 12);
         user1.put("name", "Nikita");
         user1.put("surname", "Frolov");
         user1.put("age", 20);
 
-        DataSet user2 = new DataSet();
+        DataSet user2 = new DataSetImpl();
         user2.put("id", 13);
         user2.put("name", "Julia");
         user2.put("surname", "Norkina");
@@ -126,10 +127,10 @@ public class FindTest {
         //given
         setupTableColumns("test", "id");
 
-        DataSet user1 = new DataSet();
+        DataSet user1 = new DataSetImpl();
         user1.put("id", 12);
 
-        DataSet user2 = new DataSet();
+        DataSet user2 = new DataSetImpl();
         user2.put("id", 13);
 
         when(manager.getTableData("test"))

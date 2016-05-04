@@ -38,7 +38,7 @@ public abstract class DatabaseManagerTest {
         manager.clear("user");
 
         //when
-        DataSet input = new DataSet();
+        DataSet input = new DataSetImpl();
         input.put("name", "Nikita");
         input.put("password", "pass");
         input.put("id", 13);
@@ -59,14 +59,14 @@ public abstract class DatabaseManagerTest {
         manager.clear("user");
 
         //when
-        DataSet input = new DataSet();
+        DataSet input = new DataSetImpl();
         input.put("name", "Nikita");
         input.put("password", "pass");
         input.put("id", 13);
         manager.create("user", input);
 
         //when
-        DataSet newValue = new DataSet();
+        DataSet newValue = new DataSetImpl();
         newValue.put("password", "pass2");
         manager.update("user", 13, newValue);
 
