@@ -84,10 +84,10 @@ public abstract class DatabaseManagerTest {
         manager.clear("user");
 
         //when
-        String[] columnNames = manager.getTablesColumns("user");
+        Set<String> columnNames = manager.getTablesColumns("user");
 
         //then
-        assertEquals("[name, password, id]", Arrays.toString(columnNames));
+        assertEquals("[name, password, id]", columnNames.toString());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package ua.com.juja.sqlcmd.model;
 
 import java.sql.*;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -122,22 +121,21 @@ public class JDBCDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public String[] getTablesColumns(String tableName) {
+    public Set<String> getTablesColumns(String tableName) {
+        Set<String> tables = new LinkedHashSet<>();
         try (Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * " +
                     "FROM information_schema.columns " +
                     "WHERE table_schema = 'public' " +
                     "AND table_name = '" + tableName + "'"))
         {
-            String[] tables = new String[100];
-            int index = 0;
             while (rs.next()) {
-                tables[index++] = rs.getString("column_name");
+                tables.add(rs.getString("column_name"));
             }
-            return Arrays.copyOf(tables, index, String[].class);
+            return tables;
         } catch (SQLException e) {
             e.printStackTrace();
-            return new String[0];
+            return tables;
         }
     }
 
