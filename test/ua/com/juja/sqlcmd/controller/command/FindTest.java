@@ -9,6 +9,7 @@ import ua.com.juja.sqlcmd.view.View;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -49,7 +50,7 @@ public class FindTest {
         user2.put("age", 19);
 
         when(manager.getTableData("people"))
-                .thenReturn(new DataSet[]{user1, user2});
+                .thenReturn(Arrays.asList(user1, user2));
 
         //when
         command.process("find|people");
@@ -106,10 +107,8 @@ public class FindTest {
         //given
         setupTableColumns("people", "id", "name", "surname", "age");
 
-        DataSet[] data = new DataSet[0];
-
         when(manager.getTableData("people"))
-                .thenReturn(data);
+                .thenReturn(new LinkedList<>());
 
         //when
         command.process("find|people");
@@ -134,7 +133,7 @@ public class FindTest {
         user2.put("id", 13);
 
         when(manager.getTableData("test"))
-                .thenReturn(new DataSet[]{user1, user2});
+                .thenReturn(Arrays.asList(user1, user2));
 
         //when
         command.process("find|test");

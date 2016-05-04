@@ -1,7 +1,9 @@
 package ua.com.juja.sqlcmd.model;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,26 +13,26 @@ public class JDBCDatabaseManager implements DatabaseManager {
     private Connection connection;
 
     @Override
-    public DataSet[] getTableData(String tableName) {
+    public List<DataSet> getTableData(String tableName) {
         int size = getSize(tableName);
+        List<DataSet> result = new ArrayList<>(size);
+//        List<DataSet> result = new LinkedList<>();
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM public." + tableName))
         {
             ResultSetMetaData rsmd = rs.getMetaData();
-            DataSet[] result = new DataSet[size];
-            int index = 0;
             while (rs.next()) {
                 DataSet dataSet = new DataSet();
-                result[index++] = dataSet;
-                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                    dataSet.put(rsmd.getColumnName(i), rs.getObject(i));
+                result.add(dataSet);
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    dataSet.put(rsmd.getColumnName(i + 1), rs.getObject(i + 1));
                 }
             }
             return result;
         } catch (SQLException e){
             e.printStackTrace();
-            return new DataSet[0];
+            return result;
         }
     }
 
@@ -39,8 +41,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
             ResultSet rsCount = stmt.executeQuery("SELECT COUNT(*) FROM public." + tableName))
         {
             rsCount.next();
-            int size = rsCount.getInt(1);
-            return size;
+            return rsCount.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;

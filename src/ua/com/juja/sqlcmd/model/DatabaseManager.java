@@ -1,12 +1,13 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by FlyRoNik on 10.04.2016.
  */
 public interface DatabaseManager {
-    DataSet[] getTableData(String tableName);
+    List<DataSet> getTableData(String tableName);
 
     Set<String> getTablesNames();
 

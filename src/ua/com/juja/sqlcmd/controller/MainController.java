@@ -19,7 +19,7 @@ public class MainController {
                 new Exit(view),
                 new Help(view),
                 new IsConnected(view, manager),
-                new List(view, manager),
+                new Tables(view, manager),
                 new Clear(view, manager),
                 new Create(view, manager),
                 new Find(view, manager),
