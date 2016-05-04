@@ -1,13 +1,16 @@
 package ua.com.juja.sqlcmd.model;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by FlyRoNik on 17.04.2016.
  */
 public class InMemoryDatabaseManager implements  DatabaseManager{
 
-    public static final String TABLR_NAME = "user";
+    public static final String TABLE_NAME = "user";
 
     private DataSet[] data = new DataSet[1000];
     private int freeIndex = 0;
@@ -25,8 +28,8 @@ public class InMemoryDatabaseManager implements  DatabaseManager{
     }
 
     @Override
-    public String[] getTablesNames() {
-        return new String[]{TABLR_NAME};
+    public Set<String> getTablesNames() {
+        return new LinkedHashSet<>(Collections.singletonList(TABLE_NAME));
     }
 
     @Override

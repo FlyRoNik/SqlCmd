@@ -3,7 +3,7 @@ package ua.com.juja.sqlcmd.controller.command;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
-import java.util.Arrays;
+import java.util.Set;
 
 /**
  * Created by FlyRoNik on 21.04.2016.
@@ -25,9 +25,9 @@ public class List implements Command{
 
     @Override
     public void process(String command) {
-        String[] tablesNames = manager.getTablesNames();
+        Set<String> tablesNames = manager.getTablesNames();
 
-        String massage = Arrays.toString(tablesNames);
+        String massage = tablesNames.toString();
 
         view.write(massage);
     }

@@ -2,7 +2,7 @@ package ua.com.juja.sqlcmd.model;
 
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,7 +18,7 @@ public class InMemoryDatabaseManagerTest extends DatabaseManagerTest {
 
     @Test
     public void testGetAllTableNames() {
-        String[] tablesNames = manager.getTablesNames();
-        assertEquals("[user]", Arrays.toString(tablesNames));
+        Set<String> tablesNames = manager.getTablesNames();
+        assertEquals("[user]", tablesNames.toString());
     }
 }

@@ -377,27 +377,27 @@ public class IntegrationTest {
                 "До скорой встречи!\r\n", getData());
     }
 
-    @Test
-    public void testFindWithErrorAfterConnect() {
-        //given
-        in.add("connect|mysqlcmd|nikita|1234");
-        in.add("find|nonexistst");
-        in.add("exit");
-
-        //when
-        Main.main(new String[0]);
-
-        //then
-        assertEquals("Привет юзер!\r\n" +
-                "Введите, пожалуйста имя базы данных, имя пользователя и пароль в формате:" +
-                " connect|database|userName|password\r\n" +
-                //connect|mysqlcmd|nikita|1234
-                "Успех!\r\n" +
-                "Введи команду (или help для помощи):\r\n" +
-                //unsupported
-                "[people, test, test2]\r\n" +
-                "Введи команду (или help для помощи):\r\n" +
-                //exit
-                "До скорой встречи!\r\n", getData());
-    }
+//    @Test
+//    public void testFindWithErrorAfterConnect() {
+//        //given
+//        in.add("connect|mysqlcmd|nikita|1234");
+//        in.add("find|nonexistst");
+//        in.add("exit");
+//
+//        //when
+//        Main.main(new String[0]);
+//
+//        //then
+//        assertEquals("Привет юзер!\r\n" +
+//                "Введите, пожалуйста имя базы данных, имя пользователя и пароль в формате:" +
+//                " connect|database|userName|password\r\n" +
+//                //connect|mysqlcmd|nikita|1234
+//                "Успех!\r\n" +
+//                "Введи команду (или help для помощи):\r\n" +
+//                //unsupported
+//                "[people, test, test2]\r\n" +
+//                "Введи команду (или help для помощи):\r\n" +
+//                //exit
+//                "До скорой встречи!\r\n", getData());
+//    }
 }
