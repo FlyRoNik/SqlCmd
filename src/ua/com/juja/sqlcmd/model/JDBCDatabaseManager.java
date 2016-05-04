@@ -1,8 +1,8 @@
 package ua.com.juja.sqlcmd.model;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -14,9 +14,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public List<DataSet> getTableData(String tableName) {
-        int size = getSize(tableName);
-        List<DataSet> result = new ArrayList<>(size);
-//        List<DataSet> result = new LinkedList<>();
+        List<DataSet> result = new LinkedList<>();
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM public." + tableName))
@@ -36,7 +34,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
 
-    private int getSize(String tableName) {
+    @Override
+    public int getSize(String tableName) {
         try (Statement stmt = connection.createStatement();
             ResultSet rsCount = stmt.executeQuery("SELECT COUNT(*) FROM public." + tableName))
         {

@@ -39,7 +39,7 @@ public class Find implements Command {
 
     private void printTable(List<DataSet> tableData) {
 
-        tableData.forEach(this::printColumn);
+        tableData.forEach(this::printRow);
         view.write("--------------------");
     }
 
@@ -53,8 +53,8 @@ public class Find implements Command {
         view.write("--------------------");
     }
 
-    private void printColumn(DataSet column) {
-        Object[] values = column.getValues();
+    private void printRow (DataSet column) {
+        List<Object> values = column.getValues();
         String result = "|";
         for (Object value : values) {
             result += value + "|";

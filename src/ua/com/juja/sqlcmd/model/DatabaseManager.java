@@ -9,6 +9,8 @@ import java.util.Set;
 public interface DatabaseManager {
     List<DataSet> getTableData(String tableName);
 
+    int getSize(String tableName);
+
     Set<String> getTablesNames();
 
     void connect(String database, String userName, String password);
