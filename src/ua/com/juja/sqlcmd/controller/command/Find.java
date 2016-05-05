@@ -28,7 +28,11 @@ public class Find implements Command {
     @Override
     public void process(String command) {
         String[] data = command.split("\\|");
-        String tableName = data[1]; // TODO to add validation
+        if (data.length != 2) {
+            throw  new IllegalArgumentException("Формат команды 'find|tableName'," +
+                    " а ты ввел: " + command);
+        }
+        String tableName = data[1];
 
         List<DataSet> tableData = manager.getTableData(tableName);
         Set<String> tableColumns = manager.getTablesColumns(tableName);

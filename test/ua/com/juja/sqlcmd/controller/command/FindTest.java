@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
+import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -146,6 +147,21 @@ public class FindTest {
                 "|12|, " +
                 "|13|, " +
                 "--------------------]");
+    }
+
+    @Test
+    public void testErrorWhenCommandFormat() {
+        //given
+
+        //when
+        try {
+            command.process("find|people|blabla");
+            fail("Excepted exception");
+        } catch (IllegalArgumentException e) {
+            //then
+            assertEquals("Формат команды 'find|tableName', а ты ввел: find|people|blabla",
+                    e.getMessage());
+        }
     }
 
     private void shouldPrint(String expected) {
