@@ -7,30 +7,21 @@ import java.util.*;
  */
 public class InMemoryDatabaseManager implements  DatabaseManager{
 
-    public static final String TABLE_NAME = "user";
-
-    private List<DataSet> data = new LinkedList<>();
+    private Map<String, List<DataSet>> tables =  new LinkedHashMap<>();
 
     @Override
     public List<DataSet> getTableData(String tableName) {
-        validateTable(tableName);
-        return data;
+        return get(tableName);
     }
 
     @Override
     public int getSize(String tableName) {
-        return data.size();
-    }
-
-    private void validateTable(String tableName) {
-        if (!"user".equals(tableName)) {
-            throw new UnsupportedOperationException("Only for 'user' table, but you try to work with: " + tableName);
-        }
+        return tables.get(tableName).size();
     }
 
     @Override
     public Set<String> getTablesNames() {
-        return new LinkedHashSet<>(Collections.singletonList(TABLE_NAME));
+        return tables.keySet();
     }
 
     @Override
@@ -40,22 +31,26 @@ public class InMemoryDatabaseManager implements  DatabaseManager{
 
     @Override
     public void clear(String tableName) {
-        validateTable(tableName);
-        data.clear();
+        get(tableName).clear();
+    }
+
+    private List<DataSet> get(String tableName) {
+        if (!tables.containsKey(tableName)) {
+            tables.put(tableName, new LinkedList<>());
+        }
+        return tables.get(tableName);
     }
 
     @Override
     public void create(String tableName, DataSet input) {
-        validateTable(tableName);
-        data.add(input);
+        get(tableName).add(input);
     }
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-        validateTable(tableName);
-        for (DataSet list : data) {
-            if ((int) list.get("id") == id) {
-                list.updateFrom(newValue);
+        for (DataSet dataSet : get(tableName)) {
+            if ((int) dataSet.get("id") == id) {
+                dataSet.updateFrom(newValue);
             }
         }
     }
