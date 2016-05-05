@@ -44,7 +44,7 @@ public class IntegrationTest {
                 "Существующие команды:\r\n" +
                 "\tconnect|databaseName|userName|password\r\n" +
                 "\t\tдля подключения к базе данных, с которой будем работать\r\n" +
-                "\tlist\r\n" +
+                "\ttables\r\n" +
                 "\t\tдля получения списка всех таблиц базы, к которой подключились\r\n" +
                 "\tclear|tableName\r\n" +
                 "\t\tдля очистки всей таблицы\r\n" +
@@ -89,7 +89,7 @@ public class IntegrationTest {
     @Test
     public void testListWithoutConnect() {
         //given
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -99,8 +99,8 @@ public class IntegrationTest {
         assertEquals("Привет юзер!\r\n" +
                 "Введите, пожалуйста имя базы данных, имя пользователя и пароль в формате:" +
                 " connect|database|userName|password\r\n" +
-                //list
-                "Вы не можете пользоватся командой 'list' пока не подключитесь с помощью " +
+                //tables
+                "Вы не можете пользоватся командой 'tables' пока не подключитесь с помощью " +
                 "комманды connect|databaseName|userName|password\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //exit
@@ -177,7 +177,7 @@ public class IntegrationTest {
     public void testListAfterConnect() {
         //given
         in.add("connect|mysqlcmd|nikita|1234");
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -190,7 +190,7 @@ public class IntegrationTest {
                 //connect|mysqlcmd|nikita|1234
                 "Успех!\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
-                //list
+                //tables
                 "[people, test2, test]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //exit
@@ -232,9 +232,9 @@ public class IntegrationTest {
     public void testConnectAfterConnect() {
         //given
         in.add("connect|mysqlcmd|nikita|1234");
-        in.add("list");
+        in.add("tables");
         in.add("connect|mysqlcmd|nikita|1234");
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -247,13 +247,13 @@ public class IntegrationTest {
                 //connect|mysqlcmd|nikita|1234
                 "Успех!\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
-                //list
+                //tables
                 "[people, test2, test]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //connect|mysqlcmd|nikita|1234
                 "Успех!\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
-                //list
+                //tables
                 "[people, test2, test]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 //exit

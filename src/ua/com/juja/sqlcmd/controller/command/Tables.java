@@ -20,8 +20,8 @@ public class Tables implements Command{
 
     @Override
     public boolean canProcess(String command) {
-        return command.equals("list");
-    } //TODO replace list -> table
+        return command.equals("tables");
+    }
 
     @Override
     public void process(String command) {
